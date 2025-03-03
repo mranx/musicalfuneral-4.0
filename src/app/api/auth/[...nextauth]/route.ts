@@ -1,44 +1,21 @@
-import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { comparePassword } from '@/lib/password';
-import prisma from '@/lib/database';
-import { JWT } from 'next-auth/jwt';
-import { Session } from 'next-auth';
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { comparePassword } from "@/lib/password";
+import prisma from "@/lib/database";
+import { NextAuthOptions } from "next-auth";
 
-// Define proper types for the callback parameters
-interface JWTCallbackParams {
-  token: JWT;
-  user: any;
-}
-
-// Extend the built-in types to include the id field
-interface CustomSessionUser {
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-  id?: string;
-}
-
-interface CustomSession extends Session {
-  user?: CustomSessionUser;
-}
-
-interface SessionCallbackParams {
-  session: CustomSession;
-  token: JWT & { id?: string };
-}
-
-export const authOptions = {
+// Define NextAuth options
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: 'Credentials',
+      name: "Credentials",
       credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' }
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error('Please enter email and password');
+          throw new Error("Please enter email and password");
         }
 
         const user = await prisma.user.findUnique({
@@ -46,32 +23,32 @@ export const authOptions = {
         });
 
         if (!user) {
-          throw new Error('No user found with this email');
+          throw new Error("No user found with this email");
         }
 
         const isPasswordValid = await comparePassword(credentials.password, user.password);
 
         if (!isPasswordValid) {
-          throw new Error('Incorrect password');
+          throw new Error("Incorrect password");
         }
 
         return {
           id: user.id,
           email: user.email,
-          name: user.name
+          name: user.name,
         };
       },
     }),
   ],
-  session: { strategy: 'jwt' as const },  // Use 'as const' to fix the strategy type
+  session: { strategy: "jwt" }, // No need for 'as const'
   callbacks: {
-    async jwt({ token, user }: JWTCallbackParams) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
       }
       return token;
     },
-    async session({ session, token }: SessionCallbackParams) {
+    async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id;
       }
@@ -79,11 +56,12 @@ export const authOptions = {
     },
   },
   pages: {
-    signIn: '/login',
-    error: '/login',
+    signIn: "/login",
+    error: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
 
+// ✅ Correctly export NextAuth using Next.js App Router format
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
