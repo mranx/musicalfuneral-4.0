@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AdminUsersPage() {
+  const router = useRouter();
   const [admins, setAdmins] = useState<
     { _id: string; email: string; role: string; createdAt: string }[]
   >([]);
@@ -10,17 +12,42 @@ export default function AdminUsersPage() {
   const [error, setError] = useState("");
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
 
-  // ✅ Fetch Admins & Check Role
+  // ✅ Fetch Admins & User Role
   useEffect(() => {
     const fetchAdmins = async () => {
+      const token = localStorage.getItem("adminToken");
+
+      if (!token) {
+        console.log("No token found. Redirecting to login...");
+        router.push("/admin/login");
+        return;
+      }
+
       try {
+        // ✅ Fetch the logged-in admin's role
+        const profileResponse = await fetch("/api/admin/profile", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!profileResponse.ok) {
+          throw new Error("Unauthorized access.");
+        }
+
+        const profileData = await profileResponse.json();
+
+        // ✅ Check if the logged-in user is a Super Admin
+        setIsSuperAdmin(profileData.role === "superadmin");
 
         // ✅ Fetch All Admin Users
         const response = await fetch("/api/admin/all", {
           method: "GET",
           headers: {
+            "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
-           
           },
         });
 
@@ -39,18 +66,30 @@ export default function AdminUsersPage() {
     };
 
     fetchAdmins();
-  }, []);
+  }, [router]);
 
   // ✅ Delete Admin (Only Super Admins)
   const deleteAdmin = async (id: string) => {
+    if (!isSuperAdmin) {
+      alert("You do not have permission to delete admins.");
+      return;
+    }
+
     if (!confirm("Are you sure you want to delete this admin?")) return;
 
     try {
+      const token = localStorage.getItem("adminToken");
+      if (!token) {
+        alert("Authentication error. Please log in again.");
+        router.push("/admin/login");
+        return;
+      }
+
       const response = await fetch(`/api/admin/delete/${id}`, {
         method: "DELETE",
         headers: {
+          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
-        
         },
       });
 

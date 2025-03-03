@@ -36,31 +36,45 @@ export default function AdminLogin() {
 
   // ✅ Handle Admin Login
   const onSubmit = async (data: any) => {
-    console.log("Submitting data:", data); // Debugging line
     setLoading(true);
     setError("");
     setSuccess("");
-
+  
     try {
-      const response = await axios.post("/api/admin/login", data);
-      const { token } = response.data;
-
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Login failed.");
+      }
+  
+      const responseData = await response.json();
+      const token = responseData.admin.token;
+  
+      if (!token) {
+        throw new Error("Token not received from server.");
+      }
+  
       // ✅ Store Token in Local Storage
       localStorage.setItem("adminToken", token);
-
+      console.log("Token saved:", localStorage.getItem("adminToken")); // Debugging
+  
       setSuccess("Login successful! Redirecting...");
-
       setTimeout(() => {
-        router.push("http://localhost:3000/admin/dashboard");
+        router.push("/admin/dashboard");
       }, 1500);
     } catch (error: any) {
-      console.error("Error response:", error.response?.data); // Debugging line
-      setError(error.response?.data?.message || "Something went wrong");
+      setError(error.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
   };
-
+  
   return (
     <div className="flex justify-center items-center min-h-screen bg-white">
       <div className="bg-white p-8 rounded-lg h-[470px] flex flex-col justify-between gap-8">

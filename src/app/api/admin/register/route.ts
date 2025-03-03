@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Admin registered successfully", admin: newAdmin });
     } catch (error) {
       console.error("Error registering admin:", error); // ✅ Log the actual error
-      return NextResponse.json({ message: "Error registering admin", error: error.toString() }, { status: 500 });
+      return NextResponse.json({ message: "Error registering admin" }, { status: 500 });
     }
   }
   

@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function UsersPage() {
+  const router = useRouter();
   const [users, setUsers] = useState<
     {
       id: string;
@@ -25,13 +27,26 @@ export default function UsersPage() {
   // ✅ Fetch Users
   useEffect(() => {
     const fetchUsers = async () => {
+      const token = localStorage.getItem("adminToken");
+
+      if (!token) {
+        console.log("No token found. Redirecting to login...");
+        router.push("/admin/login");
+        return;
+      }
+
       try {
         const response = await fetch("/api/user/all", {
           method: "GET",
           headers: {
+            "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
+
+        if (!response.ok) {
+          throw new Error("Unauthorized access.");
+        }
 
         const data = await response.json();
         setUsers(data.users);
@@ -44,24 +59,32 @@ export default function UsersPage() {
     };
 
     fetchUsers();
-  }, []);
+  }, [router]);
 
   // ✅ Delete User
   const deleteUser = async (id: string) => {
     if (!confirm("Are you sure you want to delete this user?")) return;
-  
+
     try {
+      const token = localStorage.getItem("adminToken");
+      if (!token) {
+        alert("Authentication error. Please log in again.");
+        router.push("/admin/login");
+        return;
+      }
+
       const response = await fetch(`/api/user/profile/${id}`, {
         method: "DELETE",
         headers: {
+          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to delete user");
       }
-  
+
       // ✅ Remove user from UI
       setUsers(users.filter((user) => user.id !== id));
       alert("User deleted successfully!");
@@ -116,7 +139,7 @@ export default function UsersPage() {
                   <td className="p-2 border">
                     <button
                       onClick={() => deleteUser(user.id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded"
+                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700"
                     >
                       Delete
                     </button>
