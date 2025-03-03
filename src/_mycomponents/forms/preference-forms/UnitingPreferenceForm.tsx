@@ -28,11 +28,7 @@ interface SectionState {
 }
   
 
-const router = useRouter();
-const handlePrevious = () => {
-  // Navigate back to the previous page
-  router.back();
-};
+
 
 export default function UnitingPreferenceForm() {
   // State for section visibility
@@ -97,7 +93,7 @@ export default function UnitingPreferenceForm() {
       [section]: !prev[section]
     }));
   };
-
+  const router = useRouter();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Add your form submission logic here
@@ -107,6 +103,10 @@ export default function UnitingPreferenceForm() {
   const handleNext=()=>{
     router.push('/final-video');
   }
+  const handlePrevious = () => {
+    // Navigate back to the previous page
+    router.back();
+  };
   
   const SectionHeader = ({ title, section }: { title: string; section: keyof typeof sections }) => (
     <div

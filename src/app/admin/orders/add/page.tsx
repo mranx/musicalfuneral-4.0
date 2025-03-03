@@ -49,7 +49,7 @@ const OrderForm = () => {
           required 
         />
 
-        <label className="block mb-2">Person's Name</label>
+        <label className="block mb-2">Persons Name</label>
         <input 
           type="text" 
           name="personName" 
