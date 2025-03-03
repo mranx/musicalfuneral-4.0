@@ -117,3 +117,36 @@ export async function PUT(request: NextRequest) {
     );
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions as any);
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const email = (session as any).user?.email;
+    if (!email) {
+      return NextResponse.json({ error: "User email not found in session" }, { status: 400 });
+    }
+
+    // Check if user exists before deleting
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!existingUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    await prisma.user.delete({
+      where: { email },
+    });
+
+    return NextResponse.json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("User delete error:", error);
+    return NextResponse.json({ error: "An error occurred while deleting user" }, { status: 500 });
+  }
+}

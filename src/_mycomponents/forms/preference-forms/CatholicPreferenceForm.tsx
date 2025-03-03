@@ -128,7 +128,9 @@ export default function CatholicPreferenceForm() {
             </label>
           </div>
             <p className="text-xs text-gray-500 dark:text-gray-400">{item.duration}</p>
+            <button type='button'>
           <AudioPlayer audioUrl={`/audio/${item.audioFile}`} />
+            </button>
         </div>
       ))}
     </div>
@@ -139,7 +141,14 @@ export default function CatholicPreferenceForm() {
     // Add your form submission logic here
     
     // Navigate to final video page
+
+  };
+  const handleNext=()=>{
     router.push('/final-video');
+  }
+  const handlePrevious = () => {
+    // Navigate back to the previous page
+    router.back();
   };
 
   return (
@@ -305,8 +314,8 @@ export default function CatholicPreferenceForm() {
 
         {/* Navigation */}
         <div className="flex justify-between pt-4">
-          <Button variant="outline" className="text-sm dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">Previous</Button>
-          <Button type="submit" className="text-sm">Next</Button>
+          <Button onClick={handlePrevious} variant="outline" className="text-sm dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">Previous</Button>
+          <Button onClick={handleNext} type="submit" className="text-sm">Next</Button>
         </div>
       </form>
     </div>

@@ -26,6 +26,11 @@ interface SectionState {
   isOpen: boolean;
   items: VocalItem[];
 }
+  const router = useRouter();
+const handlePrevious = () => {
+  // Navigate back to the previous page
+  router.back();
+};
 
 export default function UnitingPreferenceForm() {
   // State for section visibility
@@ -98,9 +103,10 @@ export default function UnitingPreferenceForm() {
     // Add your form submission logic here
     
     // Navigate to final video page
-    router.push('/final-video');
   };
-
+  const handleNext=()=>{
+    router.push('/final-video');
+  }
   const SectionHeader = ({ title, section }: { title: string; section: keyof typeof sections }) => (
     <div
       className="flex items-center justify-between cursor-pointer py-2"
@@ -131,7 +137,9 @@ export default function UnitingPreferenceForm() {
             </label>
           </div>
             <p className="text-xs text-gray-500 dark:text-gray-400">{item.duration}</p>
+            <button type='button'>
           <AudioPlayer audioUrl={`/audio/${item.audioFile}`} />
+            </button>
         </div>
       ))}
     </div>
@@ -206,8 +214,8 @@ export default function UnitingPreferenceForm() {
 
         {/* Navigation */}
         <div className="flex justify-between pt-4">
-          <Button variant="outline" className="text-sm dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">Previous</Button>
-          <Button type="submit" className="text-sm">Next</Button>
+          <Button onClick={handlePrevious} variant="outline" className="text-sm dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">Previous</Button>
+          <Button onClick={handleNext} type="submit" className="text-sm">Next</Button>
         </div>
       </form>
     </div>
