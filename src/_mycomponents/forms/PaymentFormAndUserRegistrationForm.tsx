@@ -293,7 +293,7 @@ const PaymentFormAndUserRegistrationForm: React.FC<PaymentFormAndUserRegistratio
             <div className="space-y-4 pt-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Funeral Director's Name
+                  Funeral Directors Name
                 </label>
                 <input
                   type="text"
@@ -307,7 +307,7 @@ const PaymentFormAndUserRegistrationForm: React.FC<PaymentFormAndUserRegistratio
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Funeral Director's Company Name
+                  Funeral Directors Company Name
                 </label>
                 <input
                   type="text"
@@ -321,7 +321,7 @@ const PaymentFormAndUserRegistrationForm: React.FC<PaymentFormAndUserRegistratio
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Funeral Director's Email
+                  Funeral Directors Email
                 </label>
                 <input
                   type="email"
@@ -373,7 +373,7 @@ const PaymentFormAndUserRegistrationForm: React.FC<PaymentFormAndUserRegistratio
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Your Phone Number <span className="text-red-500">*</span>
+                  Your Phone Number <span className="text-red-500"></span>
                 </label>
                 <input
                   type="tel"
@@ -388,7 +388,7 @@ const PaymentFormAndUserRegistrationForm: React.FC<PaymentFormAndUserRegistratio
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Your Relation to Deceased <span className="text-red-500">*</span>
+                  Your Relation to Deceased <span className="text-red-500"></span>
                 </label>
                 <select 
                   name="relation"
@@ -414,7 +414,7 @@ const PaymentFormAndUserRegistrationForm: React.FC<PaymentFormAndUserRegistratio
             <div className="space-y-4 pt-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Deceased Name <span className="text-red-500">*</span>
+                  Deceased Name <span className="text-red-500"></span>
                 </label>
                 <input
                   type="text"
@@ -429,7 +429,7 @@ const PaymentFormAndUserRegistrationForm: React.FC<PaymentFormAndUserRegistratio
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Date of Birth <span className="text-red-500">*</span>
+                  Date of Birth <span className="text-red-500"></span>
                 </label>
                 <input
                   type="date"
@@ -443,7 +443,7 @@ const PaymentFormAndUserRegistrationForm: React.FC<PaymentFormAndUserRegistratio
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Date of Passing <span className="text-red-500">*</span>
+                  Date of Passing <span className="text-red-500"></span>
                 </label>
                 <input
                   type="date"
