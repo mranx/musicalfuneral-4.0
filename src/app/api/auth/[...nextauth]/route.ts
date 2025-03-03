@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/utils/authOptions"; // ✅ Import from utils
+import { authOptions } from "@/app/api/utils/authOptions"; // ✅ Import from utils
 import NextAuth from "next-auth/next";
 
 // ✅ Correct NextAuth export for App Router
