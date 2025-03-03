@@ -26,7 +26,9 @@ interface SectionState {
   isOpen: boolean;
   items: VocalItem[];
 }
-  const router = useRouter();
+  
+
+const router = useRouter();
 const handlePrevious = () => {
   // Navigate back to the previous page
   router.back();
@@ -78,8 +80,6 @@ export default function UnitingPreferenceForm() {
     placingOfSymbols: false,
   });
 
-  const router = useRouter();
-
   const updateVocalSection = (section: string, id: string, checked: boolean) => {
     setVocalSections((prev: any) => ({
       ...prev,
@@ -107,6 +107,7 @@ export default function UnitingPreferenceForm() {
   const handleNext=()=>{
     router.push('/final-video');
   }
+  
   const SectionHeader = ({ title, section }: { title: string; section: keyof typeof sections }) => (
     <div
       className="flex items-center justify-between cursor-pointer py-2"
